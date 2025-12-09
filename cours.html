@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cours</title>
+
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-4">
+
+        <!-- Lecture des items -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Afficher les items Omeka S</h3>
+
+                <button id="btnGet" class="btn btn-success mb-3">
+                    Afficher les items Omeka S
+                </button>
+
+                <table id="resultat" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Cours</th>
+                            <th>Liste des étudiants</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration API
+        const baseURL = "http://localhost/omk_thyp_25-26_clone/api/items";
+        const key_identity = "mvQaS27PLlglBBZlYSsZJzRoidSh9m1X";
+        const key_credential = "r3OkVLv7KgMGZ0ezN8dQ0Uh7qDhrQxB0";
+
+        // ########################################
+        // Fonction pour récupérer la liste des cours
+        // ########################################
+        function getCours() {
+            const url = `${baseURL}?key_identity=${key_identity}&key_credential=${key_credential}`;
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
+                    return response.json();
+                });
+        }
+
+        // ########################################
+        // Fonction pour afficher la liste des cours
+        // ########################################
+        function showCours(data) {
+            let chaine = "";
+            data.forEach(item => {
+                const id = item["dcterms:abstract"]?.[0]?.["@value"] || "(sans id)";
+                const titre = item["dcterms:title"]?.[0]?.["@value"] || "(sans titre)";
+                const liste = item["dcterms:description"]?.[0]?.["@value"] || "(sans liste)";
+                chaine += `
+                    <tr>
+                        <td>${id}</td>
+                        <td>${titre}</td>
+                        <td>${liste}</td>
+                    </tr>
+                `;
+            });
+            document.querySelector("#resultat tbody").innerHTML = chaine;
+        }
+
+        // ########################################
+        // Gestion du clic sur le bouton
+        // ########################################
+        document.getElementById("btnGet").addEventListener("click", () => {
+            getCours()
+                .then(data => showCours(data))
+                .catch(err => {
+                    document.getElementById("resultat").textContent =
+                        "Erreur de lecture : " + err.message;
+                });
+        });
+    </script>
+
+    <!-- JS Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
