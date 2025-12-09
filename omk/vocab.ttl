@@ -1,0 +1,82 @@
+@prefix ex: <http://example.org/master-eval#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#######################################
+# Classes
+#######################################
+
+ex:Etudiant a rdfs:Class ;
+    rdfs:label "Étudiant" ;
+    rdfs:comment "Un étudiant inscrit dans le Master." .
+
+ex:Cours a rdfs:Class ;
+    rdfs:label "Cours" ;
+    rdfs:comment "Un cours enseigné dans le cadre du Master." .
+
+ex:Enseignant a rdfs:Class ;
+    rdfs:label "Enseignant" ;
+    rdfs:comment "Un enseignant responsable d'un cours." .
+
+ex:Evaluation a rdfs:Class ;
+    rdfs:label "Évaluation" ;
+    rdfs:comment "Une évaluation associée à un cours et un étudiant (examen, devoir, projet)." .
+
+#######################################
+# Propriétés
+#######################################
+
+# L’étudiant évalué
+ex:concerneEtudiant a rdf:Property ;
+    rdfs:label "concerneEtudiant" ;
+    rdfs:domain ex:Evaluation ;
+    rdfs:range ex:Etudiant ;
+    rdfs:comment "Indique l'étudiant lié à l'évaluation." .
+
+# Le cours lié à l’évaluation
+ex:concerneCours a rdf:Property ;
+    rdfs:label "concerneCours" ;
+    rdfs:domain ex:Evaluation ;
+    rdfs:range ex:Cours ;
+    rdfs:comment "Indique le cours lié à l'évaluation." .
+
+# L’enseignant responsable
+ex:enseignePar a rdf:Property ;
+    rdfs:label "enseignePar" ;
+    rdfs:domain ex:Cours ;
+    rdfs:range ex:Enseignant ;
+    rdfs:comment "Relie un cours à son enseignant." .
+
+# La note
+ex:note a rdf:Property ;
+    rdfs:label "note" ;
+    rdfs:domain ex:Evaluation ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Note obtenue par l'étudiant." .
+
+# Commentaire de l’enseignant
+ex:commentaire a rdf:Property ;
+    rdfs:label "commentaire" ;
+    rdfs:domain ex:Evaluation ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Commentaire laissé par l'enseignant dans le cadre de l'évaluation." .
+
+# Identité des étudiants
+ex:nom a rdf:Property ;
+    rdfs:label "nom" ;
+    rdfs:domain ex:Etudiant ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Nom de l'étudiant." .
+
+ex:prenom a rdf:Property ;
+    rdfs:label "prenom" ;
+    rdfs:domain ex:Etudiant ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Prénom de l'étudiant." .
+
+# Informations sur les cours
+ex:titreCours a rdf:Property ;
+    rdfs:label "titreCours" ;
+    rdfs:domain ex:Cours ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Titre du cours." .
