@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemple</title>
+
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-4">
+
+        <!-- ========================= -->
+        <!-- Lecture des items -->
+        <!-- ========================= -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Afficher les items Omeka S</h3>
+
+                <button id="btnGet" class="btn btn-success mb-3">
+                    Afficher les items Omeka S
+                </button>
+
+                <table id="resultat" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Texte</th>
+                            <th>Résumé</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================= -->
+        <!-- Création d’item texte -->
+        <!-- ========================= -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Créer un item dans Omeka S</h3>
+
+                <div class="mb-3">
+                    <label for="titre">Titre</label>
+                    <input type="text" id="titre" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="texte">Texte</label>
+                    <textarea id="texte" class="form-control"></textarea>
+                </div>
+
+                <button id="btnEnvoyer" class="btn btn-success mb-3">
+                    Envoyer les données à Omeka S
+                </button>
+
+                <h5>Résultat</h5>
+                <pre id="responseItem" class="bg-light p-3 border rounded"></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

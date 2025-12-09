@@ -1,0 +1,21 @@
+@prefix ex: <http://example.org/vocab#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Définition des classes
+ex:Texte_resume a rdfs:Class ;
+    rdfs:label "texte_resume" ;
+    rdfs:comment "Un texte et son résumé que l'on souhaite stocker." .
+
+# Définition des propriétés
+ex:texte a rdf:Property ;
+    rdfs:label "texte" ;
+    rdfs:domain ex:Texte_resume ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Contenu textuel." .
+
+ex:resume a rdf:Property ;
+    rdfs:label "resume" ;
+    rdfs:domain ex:Texte_resume ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Contenu du résumé." .
