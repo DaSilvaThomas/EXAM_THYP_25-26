@@ -19,6 +19,9 @@
                     Afficher les items Omeka S
                 </button>
 
+                <!-- Filtre -->
+                <input type="text" id="filterInput" class="form-control mb-3" placeholder="Filtrer par cours ou étudiant">
+
                 <table id="resultat" class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
@@ -38,6 +41,8 @@
         const baseURL = "http://localhost/omk_thyp_25-26_clone/api/items";
         const key_identity = "mvQaS27PLlglBBZlYSsZJzRoidSh9m1X";
         const key_credential = "r3OkVLv7KgMGZ0ezN8dQ0Uh7qDhrQxB0";
+
+        let coursData = []; // On stocke les données pour pouvoir les filtrer
 
         // ########################################
         // Fonction pour récupérer la liste des cours
@@ -72,15 +77,38 @@
         }
 
         // ########################################
+        // Fonction pour filtrer la liste des cours
+        // ########################################
+        function filterCours(data, motCle) {
+            const filtre = motCle.toLowerCase();
+            return data.filter(item => {
+                const titre = item["dcterms:title"]?.[0]?.["@value"]?.toLowerCase() || "";
+                const liste = item["dcterms:description"]?.[0]?.["@value"]?.toLowerCase() || "";
+                return titre.includes(filtre) || liste.includes(filtre);
+            });
+        }
+
+        // ########################################
         // Gestion du clic sur le bouton
         // ########################################
         document.getElementById("btnGet").addEventListener("click", () => {
             getCours()
-                .then(data => showCours(data))
+                .then(data => {
+                    coursData = data; // on garde les données pour le filtre
+                    showCours(coursData);
+                })
                 .catch(err => {
                     document.getElementById("resultat").textContent =
                         "Erreur de lecture : " + err.message;
                 });
+        });
+
+        // ########################################
+        // Gestion du filtre en temps réel
+        // ########################################
+        document.getElementById("filterInput").addEventListener("input", (e) => {
+            const filteredData = filterCours(coursData, e.target.value);
+            showCours(filteredData);
         });
     </script>
 
