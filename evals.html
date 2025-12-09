@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Evals</title>
+
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-4">
+
+        <!-- Création d’item texte -->
+        <div class="card mb-4 shadow">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Créer un item dans Omeka S</h3>
+
+                <div class="mb-3">
+                    <label for="titre">Nom du cours</label>
+                    <input type="text" id="titre" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cours_id">Id</label>
+                    <textarea id="cours_id" class="form-control"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="note">Note</label>
+                    <textarea id="note" class="form-control"></textarea>
+                </div>
+
+                <button id="btnEnvoyer" class="btn btn-success mb-3">
+                    Envoyer les données à Omeka S
+                </button>
+
+                <h5>Résultat</h5>
+                <pre id="responseItem" class="bg-light p-3 border rounded"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration API
+        const baseURL = "http://localhost/omk_thyp_25-26_clone/api/items";
+        const key_identity = "mvQaS27PLlglBBZlYSsZJzRoidSh9m1X";
+        const key_credential = "r3OkVLv7KgMGZ0ezN8dQ0Uh7qDhrQxB0";
+
+        // ########################################
+        // Fonction pour enregistrer une évaluation dans Omeka S
+        // ########################################
+        function setEval(titre, id, note) {
+            const newItem = {
+                "o:is_public": true,
+
+                // Titre
+                "dcterms:title": [
+                    { "type": "literal", "property_id": "auto", "@value": titre }
+                ],
+
+                // Id du cours
+                "dcterms:description": [
+                    { "type": "literal", "property_id": "auto", "@value": id }
+                ],
+
+                // Note
+                "dcterms:abstract": [
+                    { "type": "literal", "property_id": "auto", "@value": note }
+                ]
+            };
+
+            return fetch(`${baseURL}?key_identity=${key_identity}&key_credential=${key_credential}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newItem)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`Erreur HTTP ${response.status}: ${text}`);
+                    });
+                }
+                return response.json();
+            });
+        }
+
+        // ########################################
+        // Gestion du clic sur le bouton
+        // ########################################
+        document.getElementById("btnEnvoyer").addEventListener("click", () => {
+            const titre = document.getElementById("titre").value.trim();
+            const id = document.getElementById("cours_id").value.trim();
+            const note = document.getElementById("note").value.trim();
+
+            setEval(titre, id, note)
+                .then(data => {
+                    document.getElementById("responseItem").textContent =
+                        "Item créé avec succès :\n" + JSON.stringify(data, null, 2);
+                })
+                .catch(err => {
+                    document.getElementById("responseItem").textContent =
+                        "Erreur : " + err.message;
+                });
+        });
+    </script>
+
+    <!-- JS Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
